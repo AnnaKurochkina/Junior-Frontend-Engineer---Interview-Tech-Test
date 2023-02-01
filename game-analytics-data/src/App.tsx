@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Papa, { LocalFile } from "papaparse";
+import "./App.scss";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const datasample = require("./Assets/datasample.csv") as LocalFile;
+
+const App = () => {
+	const [data, setData] = useState([]);
+
+	function GetData(datasample: LocalFile) {
+        const data = Papa.parse(datasample, {
+            download: true,
+            header: true,
+            complete: (results: any) => {
+                const data = results.data;
+                setData(data);
+            },
+        });
+        return data;
+    }
+
+	useEffect(() => {
+        GetData(datasample);
+    }, []);
+
+	console.log(data);
+
+    return <div className="App">
+		Hello
+		</div>;
 }
 
 export default App;
