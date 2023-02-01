@@ -13,7 +13,8 @@ const App = () => {
 	const [app, setApp] = useState("");
 	const [adNetwork, setAdNetwork] = useState("");
 	const [platform, setPlatform] = useState("");
-	const [splitBy, setSpiltBy] = useState("");
+	const [splitBy, setSplitBy] = useState("");
+	const [display, setDisplay] = useState("chart");
 
 	useEffect(() => {
 		Papa.parse(datasample, {
@@ -181,31 +182,41 @@ const App = () => {
 				))}
 			</select>
 			<label>Split by: </label>
-			<select onChange={(event) => setSpiltBy(event.target.value)}>
+			<select onChange={(event) => setSplitBy(event.target.value)}>
 				<option value="">Nothing</option>
 				{splitBys.map((splitBy) => (
 					<option value={splitBy}>{splitBy}</option>
 				))}
 			</select>
-			<div className="grid-header">
-				<div className="grid-item">Date</div>
-				<div className="grid-item">Country</div>
-				<div className="grid-item">App</div>
-				<div className="grid-item">AdNetwork</div>
-				<div className="grid-item">Platform</div>
-				<div className="grid-item">DailyUsers</div>
-			</div>
-			{filteredData.map((record) => (
-				<div className="grid-container">
-					<div className="grid-item">{record.Date}</div>
-					<div className="grid-item">{record.Country}</div>
-					<div className="grid-item">{record.App}</div>
-					<div className="grid-item">{record.AdNetwork}</div>
-					<div className="grid-item">{record.Platform}</div>
-					<div className="grid-item">{record.DailyUsers}</div>
+			<label>Display: </label>
+			<select onChange={(event) => setDisplay(event.target.value)}>
+				<option value="chart">Chart</option>
+				<option value="table">Table</option>
+			</select>
+			{display === "chart" ? (
+				<Bar options={options} data={chartData} />
+			) : (
+				<div>
+					<div className="grid-header">
+						<div className="grid-item">Date</div>
+						<div className="grid-item">Country</div>
+						<div className="grid-item">App</div>
+						<div className="grid-item">AdNetwork</div>
+						<div className="grid-item">Platform</div>
+						<div className="grid-item">DailyUsers</div>
+					</div>
+					{filteredData.map((record) => (
+						<div className="grid-container">
+							<div className="grid-item">{record.Date}</div>
+							<div className="grid-item">{record.Country}</div>
+							<div className="grid-item">{record.App}</div>
+							<div className="grid-item">{record.AdNetwork}</div>
+							<div className="grid-item">{record.Platform}</div>
+							<div className="grid-item">{record.DailyUsers}</div>
+						</div>
+					))}
 				</div>
-			))}
-			<Bar options={options} data={chartData} />
+			)}
 		</div>
 	);
 };
